@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstdlib>
+#include <conio.h>
 #define NIL NULL
 
 using namespace std;
@@ -76,10 +77,23 @@ void gambarPeta(address root, int posisiX, int posisiY, int radiusPandang) {
     }
 }
 
+string cekPesanObj(address root, int x, int y) {
+    if (root == NIL) return "";
+    if (root->x == x && root->y == y) return root->pesan;
+
+    if (x < root->x) return cekPesanObj(root->left, x, y);
+    else if(x> root->x) return cekPesanObj(root->right, x, y);
+    else {
+        if (y < root->y) return cekPesanObj(root->left, x, y);
+        else return cekPesanObj(root->right, x, y);
+    }
+}
+
 void mulaiBermain(address root, int radiusPandang) {
     int x = 0, y = 0;
     bool masihBermain = true;
     char pilihanBermain;
+    string pesanObj;
     do {
         system("cls");
         cout << "======== MINUS ========" << endl;
@@ -87,23 +101,30 @@ void mulaiBermain(address root, int radiusPandang) {
         cout << "P: Player, #: Tembok, *: Obeject" << endl << endl;
 
         gambarPeta(root, x, y, radiusPandang);
-        cout << "\n-Gunakan x untuk keluar\n";
-        cout << "-Gunakan (w/a/s/d) untuk bergerak\n";
+        
+        cout << "\n>Pesan: " << pesanObj;
+        pesanObj = ""; // reset pesan
+
+        cout << "\n>Gunakan x untuk keluar\n";
+        cout << ">Gunakan (w/a/s/d) untuk bergerak\n";
         cout << "input: ";
-        cin >> pilihanBermain;
+        pilihanBermain = static_cast<char>(_getch());
+        
+        int langkahX = x;
+        int langkahY = y;
         switch (pilihanBermain)
         {
         case 'w':
-            y++;
+            langkahY++;
             break;
         case 's':
-            y--;
+            langkahY--;
             break;
         case 'a':
-            x--;
+            langkahX--;
             break;
         case 'd':
-            x++;
+            langkahX++;
             break;
         case 'x':
             masihBermain = false;
@@ -111,7 +132,12 @@ void mulaiBermain(address root, int radiusPandang) {
             break;
         }
 
-        // fungsi yang mengecek tembok (jika benar tembok, maka player tidak jalan)
+        pesanObj = cekPesanObj(root, langkahX, langkahY);
+
+        if (!apakahTembok(root, langkahX, langkahY)) {
+            x = langkahX;
+            y = langkahY;
+        }
     } while (masihBermain);
 }
 
@@ -144,17 +170,50 @@ void lihatSetting(int &radiusPandang) {
     } while (pilihanSetting != 3);
 }
 
+void inputTembok(address &root) {
+    root = insert(root, -1, -1, "Tembok Kanan", "AWAS! Ada tembok, tidak bisa lewat!", true);
+    root = insert(root, 0, -1, "Tembok Kiri", "AWAS! Ada tembok, tidak bisa lewat!", true);
+    root = insert(root, 1, -1, "Tembok Atas", "AWAS! Ada tembok, tidak bisa lewat!", true);
+
+    root = insert(root, -1, 0, "Tembok Atas", "AWAS! Ada tembok, tidak bisa lewat!", true);
+    // root = insert(root, 0, 0, "Tembok Atas", "AWAS! Ada tembok, tidak bisa lewat!", true); ini koordinat player kocak
+    root = insert(root, 1, 0, "Tembok Atas", "AWAS! Ada tembok, tidak bisa lewat!", true);
+
+    // root = insert(root, 0, 1, "Tembok Atas", "AWAS! Ada tembok, tidak bisa lewat!", true);
+    root = insert(root, -1, 1, "Tembok Atas", "AWAS! Ada tembok, tidak bisa lewat!", true);
+    root = insert(root, 1, 1, "Tembok Atas", "AWAS! Ada tembok, tidak bisa lewat!", true);
+
+    root = insert(root, -1, 2, "Tembok Atas", "AWAS! Ada tembok, tidak bisa lewat!", true);
+    root = insert(root, 1, 2, "Tembok Atas", "AWAS! Ada tembok, tidak bisa lewat!", true);
+    
+    root = insert(root, -1, 3, "Tembok Atas", "AWAS! Ada tembok, tidak bisa lewat!", true);
+    root = insert(root, 1, 3, "Tembok Atas", "AWAS! Ada tembok, tidak bisa lewat!", true);
+
+    root = insert(root, -1, 4, "Tembok Atas", "AWAS! Ada tembok, tidak bisa lewat!", true);
+    root = insert(root, 1, 4, "Tembok Atas", "AWAS! Ada tembok, tidak bisa lewat!", true);
+
+    root = insert(root, -1, 5, "Tembok Atas", "AWAS! Ada tembok, tidak bisa lewat!", true);
+    root = insert(root, 1, 5, "Tembok Atas", "AWAS! Ada tembok, tidak bisa lewat!", true);
+
+    root = insert(root, -1, 6, "Tembok Atas", "AWAS! Ada tembok, tidak bisa lewat!", true);
+    root = insert(root, 1, 6, "Tembok Atas", "AWAS! Ada tembok, tidak bisa lewat!", true);
+
+    root = insert(root, -1, 7, "Tembok Atas", "AWAS! Ada tembok, tidak bisa lewat!", true);
+    root = insert(root, 1, 7, "Tembok Atas", "AWAS! Ada tembok, tidak bisa lewat!", true);
+}
+
+void inputObject(address &root) {
+    root = insert(root, 0, -2, "Bunga", "NIH BUNGA BUAT KAMU", false); 
+}
+
 int main () {
     address root = NIL;
     int pilihanMenu;
-    int radiusPandang = 5;
+    int radiusPandang = 5;\
 
-    root = insert(root, 2, 0, "Tembok Kanan", "AWAS! Ada tembok, tidak bisa lewat!", true);
-    root = insert(root, -2, 0, "Tembok Kiri", "AWAS! Ada tembok, tidak bisa lewat!", true);
-    root = insert(root, 0, 2, "Tembok Atas", "AWAS! Ada tembok, tidak bisa lewat!", true);
-    root = insert(root, 0, -2, "Tembok Bawah", "AWAS! Ada tembok, tidak bisa lewat!", true);
+    inputTembok(root);
+    inputObject(root);
 
-    root = insert(root, 1, 1, "Bunga", "NIH BUNGA BUAT KAMU", false); 
     do {
         system("cls");
         cout << "=========================" << endl;
