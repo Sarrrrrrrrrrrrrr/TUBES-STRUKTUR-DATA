@@ -5,6 +5,15 @@
 #include <conio.h>
 
 // --gameplay.h--
+// variabel global kunci
+bool kunciDimiliki = false;
+
+// --gameplay.h--
+// variabel global info ruangan
+// 1 = Perpustakaan, 2 = Lorong Kampus
+int ruanganAktif = 1;
+
+// --gameplay.h--
 // untuk mengecek apakah koordinat tertentu tembok
 bool apakahTembok(address root, int x, int y);
 
@@ -55,15 +64,19 @@ void pindahKeRuangan(address &root, int &x, int &y, int tujuan);
 void lihatSetting(address &root, int &radiusPandang);
 
 // --gameplay.h--
+// input objek atau buat objek baru
+void inputObject(address &root);
+
+// --gameplay.h--
 // yang developer developer aja
 void menuDeveloper(address &root);
 
-
 // --gameplay.h
+// untuk input tembok manual
 void inputTembok(address &root);  
 
 // --gameplay.h--
+// untuk memulai gamenya
 void mulaiBermain(address &root, int radiusPandang);
-
 
 #endif
