@@ -1,43 +1,6 @@
-#include <iostream>
-#include <cstdlib>
-#include <conio.h>
-#include <string>
-#define NIL NULL
-
-const char* trash = R"(                                                                                                       
-....                                              
--=-:.....                                         
-#**++=::.. .                                      
-@@%@@@%+---:...                                   
-@@@@@@@%#+=-:.                                    
-@@@@@@@%%#+=+-.                                   
-@@@@@@@@%#*++-.                                   
-@@@@@##+*=+=--.                                   
-+=-:.                                             
-    ..:.                                          
-  .*+  .%-                                        
-  *@. . =:                                        
-    ...                                                                                         
--:::.......::--.                                  
-%+***+==++#%%%*=.                                 
-%%#*+*###@@@@@@#=.                                
-=#*%@#++*%@@@@@@#-.                               
-%#@@@@%+:-*%@@@%+=.                               
-@@@@@@%*++::#%%+-=.                               
-@@@@@@#+==+=.**=.-.                               
-@%#+-:..    :#+:.:.                               
-=-:...     +%@+.:.                                
-@#@-%-:  .*@@#:::                                 
-@==.=.:.-%@@%-::.                                 
-#-%=-.-#@@@@+.-.                                  
--=+++*%@@@@%.:.                                   
-%%%@@@@@@%#-.                                     
-@@@@@@@@#=.                                       
-@@@@@@%+:                                         
-@@@@%*:                                           
-@@%+:                                             
-+-.                                                                                                                                                                                                                    
-)";
+#include "bstNode.h"
+#include "gameplay.h"
+#include "pesanObjek.h"
 
 using namespace std;
 
@@ -45,32 +8,20 @@ using namespace std;
 bool kunciDimiliki = false;
 int ruanganAktif = 1; // 1 = Perpustakaan, 2 = Lorong Kampus (bisa ditambah lagi)
 
-// --- Tipe Node untuk BST sederhana (menyimpan objek berdasarkan koordinat) ---
-typedef struct Node *address;
-
-struct Node {
-    int x, y;
-    string nama;
-    bool dilewati; // true berarti tidak bisa dilewati (tembok / pintu tertutup)
-    string pesan;
-    address left, right;
-};
-
 void tampilkanTempatSampah() {
     system("cls");
-    std::cout << trash << std::endl;
-    std::cout << "\n(Tenpat sampah?)\n";
+    cout << trash << std::endl;
+    cout << "\n(Tenpat sampah?)\n";
     _getch();
 }
 
-// ========== FUNGSI DASAR BST / K-D TREE SEDERHANA ==========
 address createNode(int objectX, int objectY, string namaObject, string pesanObject, bool statusDilewati) {
     address node = new Node;
     node->x = objectX;
     node->y = objectY;
     node->nama = namaObject;
     node->pesan = pesanObject;
-    node->dilewati = statusDilewati;
+    node->tembus = statusDilewati;
     node->left = node->right = NIL;
     return node;
 }
@@ -93,7 +44,7 @@ address insert(address root, int x, int y, string namaObj, string pesanObj, bool
 
 bool apakahTembok(address root, int x, int y) {
     if (root == NIL) return false;
-    if (root->x == x && root->y == y) return root->dilewati; // jika dilewati true => penghalang
+    if (root->x == x && root->y == y) return root->tembus; // jika dilewati true => penghalang
 
     if (x < root->x) return apakahTembok(root->left, x, y);
     else if(x > root->x) return apakahTembok(root->right, x, y);
@@ -146,7 +97,7 @@ address cariNode(address root, int x, int y) {
 void ubahPropertiNode(address root, int x, int y, bool statusBaruDilewati, string pesanBaru) {
     address node = cariNode(root, x, y);
     if (node != NIL) {
-        node->dilewati = statusBaruDilewati;
+        node->tembus = statusBaruDilewati;
         node->pesan = pesanBaru;
     }
 }
@@ -392,7 +343,7 @@ void mulaiBermain(address &root, int radiusPandang) {
             } else if (ruanganAktif == 2 && namaObjekLangkah == "PintuRuangKelas") {
                 // contoh pintu ruang kelas yang terkunci
                 address nodePintuKelas = cariNode(root, langkahX, langkahY);
-                if (nodePintuKelas != NIL && nodePintuKelas->dilewati == true) {
+                if (nodePintuKelas != NIL && nodePintuKelas->tembus == true) {
                     pesanObj = "Pintu ruang kelas terkunci.";
                 } else {
                     // jika dibuka : bisa buat pindah ke ruangan lain
