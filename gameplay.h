@@ -22,8 +22,11 @@ void ubahPropertiNode(address root, int x, int y,
     bool statusBaruDilewati, string pesanBaru);
     
 // --gameplay.h--
-// fungsi untuk menampilkan obejk tempat sampah
+// function untuk menampilkan obejk tempat sampah
 void tampilkanTempatSampah();
+
+// menampilkan art di perpustakaan
+void tampilkanArtPerpustakaan();
     
 // --gameplay.h--
 // mencari nama objek dan mengembalikan variabel tipe string
@@ -37,6 +40,10 @@ void gambarPeta(address root, int x,
 // --gameplay.h--
 // untuk developer mode membuat tembok
 void buatNodeTembok(address &root, int xAwal, int yAwal, int xAkhir, int yAkhir);
+
+// --gameplay.h--
+// untuk membuat rak buku
+void buatRakBuku(address &root, int xAwal, int yAwal, int xAkhir, int yAkhir);
 
 // --gameplay.h--
 // Membuat ruangan perpustakaan

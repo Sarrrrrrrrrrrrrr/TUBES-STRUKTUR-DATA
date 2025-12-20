@@ -61,6 +61,13 @@ void tampilkanTempatSampah() {
     _getch();
 }
 
+void tampilkanArtPerpustakaan() {
+    system("cls");
+    cout << artPerpustakaan << std::endl;
+    cout << "\n(Sebuah karya seni...)\n";
+    _getch();
+}
+
 string cariNamaObj(address root, int x, int y) {
     address node = cariNode(root, x, y);
     if (node != NIL) return node->nama;
@@ -88,6 +95,9 @@ void gambarPeta(address root, int posisiX, int posisiY, int radiusPandang) {
                 else if (namaObjek == "Tembok") {
                     cout << "# ";
                 }
+                else if (namaObjek == "RakBuku") {
+                    cout << "||";
+                }
                 else {
                     cout << "* ";
                 }
@@ -113,6 +123,14 @@ void buatNodeTembok(address &root, int xAwal, int yAwal, int xAkhir, int yAkhir)
     }
 }
 
+void buatRakBuku(address &root, int xAwal, int yAwal, int xAkhir, int yAkhir) {
+    for (int y = yAwal; y <= yAkhir; y++) {
+        for (int x = xAwal; x <= xAkhir; x++) {
+            root = insert(root, x, y, "RakBuku", "Rak ini penuh dengan buku-buku menarik.", true);
+        }
+    }
+}
+
 void inisialisasiPetaPerpustakaan(address &root) {
     root = NIL;
     const int BATAS = 7; 
@@ -127,8 +145,16 @@ void inisialisasiPetaPerpustakaan(address &root) {
     buatNodeTembok(root, BATAS, -BATAS, BATAS, BATAS);  // Kanan
     
     // --- Menambahkan Rak Buku (Tembok internal) ---
-    buatNodeTembok(root, -5, -5, -5, 5); // Rak Kiri
-    buatNodeTembok(root, 5, -5, 5, 5);  // Rak Kanan
+    // Konfigurasi: 6 kolom rak, terbelah di tengah (y=0) untuk jalan
+    // Kolom X: -5, -3, -1, 1, 3, 5
+    int kolomRak[] = {-5, -3, -1, 1, 3, 5};
+    for (int i = 0; i < 6; i++) {
+        int x = kolomRak[i];
+        // Bagian Bawah (y: -5 s.d -1)
+        buatRakBuku(root, x, -5, x, -1);
+        // Bagian Atas (y: 1 s.d 5)
+        buatRakBuku(root, x, 1, x, 5);
+    }
     
     // --- Objek PENTING ---
     // Objek 1: Kunci yang harus ditemukan (*)
@@ -136,6 +162,9 @@ void inisialisasiPetaPerpustakaan(address &root) {
     
     // Objek 3: Pesan Awal
     root = insert(root, 0, 0, "Pesan", "Anda di dalam perpustakaan. Cari kunci (X=6, Y=6) dan Pintu (X=7, Y=0) untuk keluar!", false);
+
+    // Objek 4: Lukisan Art (Interaksi Point)
+    root = insert(root, 5, 0, "Lukisan", "Sebuah karya seni misterius.", false);
 }
 
 void buatLorongKampus(address &root) {
@@ -315,8 +344,14 @@ void mulaiBermain(address &root, int radiusPandang) {
 
         // --- Interaksi TEMPAT SAMPAH di ruangan 2 ---
         if (ruanganAktif == 2 && namaObjekLangkah == "Tempat Sampah") {
-        tampilkanTempatSampah();   // <--- menampilkan ASCII
-        pesanObj = "Kamu melihat sesuatu... tapi tempat sampahnya kosong.";
+            tampilkanTempatSampah();   // <--- menampilkan ASCII
+            pesanObj = "Kamu melihat sesuatu... tapi tempat sampahnya kosong.";
+        }
+
+        // --- Interaksi LUKISAN di ruangan 1 ---
+        if (ruanganAktif == 1 && namaObjekLangkah == "Lukisan") {
+            tampilkanArtPerpustakaan();
+            pesanObj = "Anda mengagumi karya seni tersebut.";
         }
 
 
