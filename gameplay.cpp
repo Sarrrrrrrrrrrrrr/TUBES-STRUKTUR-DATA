@@ -239,11 +239,11 @@ void pindahKeRuangan(address &root, int &x, int &y, int tujuan) {
     ruanganAktif = tujuan;
     if (tujuan == 1) {
         inisialisasiPetaPerpustakaan(root);
-        x = 0; y = 0;
+        x = 6; y = 0;
     } else if (tujuan == 2) {
         buatLorongKampus(root);
         // Spawn point di lorong (kiri agak masuk)
-        x = -10; y = 0;
+        x = -11; y = 0;
     }
 }
 
