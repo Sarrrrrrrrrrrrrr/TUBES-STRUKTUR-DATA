@@ -1,12 +1,5 @@
 #include "effect.h"
 
-<<<<<<< Updated upstream
-// Terima deskripsi di sini
-effect* createeffect(string effectname, string desc) {
-    effect* newEffect = new effect;
-    newEffect->nama = effectname;
-    newEffect->deskripsi = desc; // <--- Simpan deskripsi langsung!
-=======
 
 effect* createeffect(string effectname, string desc, EffectType type, 
                      string statAffected, int value) {
@@ -20,29 +13,10 @@ effect* createeffect(string effectname, string desc, EffectType type,
     newEffect->value = value;
     newEffect->isActive = (type == PASSIVE); 
     
->>>>>>> Stashed changes
     newEffect->next = nullptr;
     return newEffect;
 }
 
-<<<<<<< Updated upstream
-// Terima deskripsi di sini juga
-void addeffect(effect*& head, string effectname, string desc) {
-    effect* newEffect = createeffect(effectname, desc);
-    
-    if (head == nullptr) {
-        head = newEffect;
-    } else {
-        // Traversal ke ujung ekor anak
-        effect* temp = head;
-        while (temp->next != nullptr) {
-            temp = temp->next;
-        }
-        temp->next = newEffect;
-    }
-}
-
-=======
 
 void displayEffects(effect* head) {
     if (head == nullptr) {
@@ -73,4 +47,3 @@ void activateEffect(effect* effectNode) {
         cout << "[+] Effect '" << effectNode->nama << "' activated!" << endl;
     }
 }
->>>>>>> Stashed changes

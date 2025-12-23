@@ -4,21 +4,6 @@
 #include <string>
 using namespace std;
 
-<<<<<<< Updated upstream
-struct effect{
-    string nama;
-    string deskripsi; 
-    effect* next;
-};
-
-// Update parameternya: tambah string deskripsi
-effect* createeffect(string effectname, string desc);
-void addeffect(effect*& head, string effectname, string desc);
-
-void removeEffect(effect*& head, string effectname);
-void displayEffects(effect* head);
-void clearAlleffects(effect*& head);
-=======
 enum EffectType {
     PASSIVE,    // Selalu aktif (stat boost)
     ACTIVE,     // Perlu diaktifkan manual
@@ -52,6 +37,5 @@ void addeffect(effect*& head, string effectname, string desc,
 void activateEffect(effect* effectNode);
 void deactivateEffect(effect* effectNode);
 effect* findEffect(effect* head, string effectName);
->>>>>>> Stashed changes
 
 #endif
